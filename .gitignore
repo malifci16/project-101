@@ -1,0 +1,54 @@
+# Ignore node_modules under tracker-web
+tracker-web/node_modules/
+
+# Ignore all .iml files in the root folder and subfolders
+*.iml
+
+# Ignore dist folder under tracker-web
+tracker-web/dist/
+
+# Ignore target folder under tracker-api
+tracker-api/target/
+
+# IntelliJ IDEA-specific ignores
+.idea/
+*.iws
+out/
+*.ipr
+
+# Ignore IntelliJ IDEA module and workspace files
+*.iml
+*.idea/
+
+# Ignore IntelliJ's "workspace.xml" file (stores user-specific workspace settings)
+.idea/workspace.xml
+
+# Ignore "misc.xml" file (stores general project settings that are not tied to version control)
+.idea/misc.xml
+
+# Ignore log files and indexes
+.idea/libraries/
+.idea/modules.xml
+.idea/assetWizard.xml
+.idea/dictionaries/
+.idea/httpRequests/
+
+# Ignore run/debug configurations
+.idea/runConfigurations/
+
+# Ignore local history (specific to your project)
+.idea/localHistory/
+
+# Ignore editor-centric settings
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+.idea/sqlDataSources.xml
+.idea/tasks.xml
+.idea/uiDesigner.xml
+
+# Ignore files that contain IDE project specific settings
+.idea/codeStyles/
+.idea/inspectionProfiles/
+
+# Ignore IDE-generated directories
+out/
