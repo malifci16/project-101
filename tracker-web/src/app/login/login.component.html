@@ -1,0 +1,80 @@
+<div class="login-card">
+  <div class="image-container">
+    <img src="assets/images/users/1.png" alt="user" class="profile-pic small-image">
+  </div>
+  <div class="image-container">
+    <mat-card-title *ngIf="isLoginMode">Login to Access Budget Tracker</mat-card-title>
+    <mat-card-title *ngIf="!isLoginMode">Sign Up to Access Budget Tracker</mat-card-title>
+  </div>
+  <mat-card>
+    <mat-card-content *ngIf="isLoginMode">
+      <form [formGroup]="loginForm">
+        <mat-form-field>
+          <input matInput formControlName="userName" type="text" placeholder="User Name">
+          <mat-error *ngIf="loginForm.get('userName')?.hasError('required') && loginForm.get('userName')?.touched">
+            User Name is required.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="password" formControlName="password" placeholder="Password">
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched">
+            Password is required.
+          </mat-error>
+        </mat-form-field>
+        <mat-action-row class="d-flex justify-content-center action-row">
+            <button mat-raised-button class="mx-2" color="primary" (click)="doLogin()">Login</button>
+        </mat-action-row>
+        <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <mat-action-row class="d-flex justify-content-center action-row">
+          <button mat-raised-button class="mx-2" color="warn" (click)="changeMode()">Create a New Account ?</button>
+        </mat-action-row>
+      </form>
+    </mat-card-content>
+    <mat-card-content *ngIf="!isLoginMode">
+      <form [formGroup]="signUpForm">
+        <mat-form-field>
+          <input matInput formControlName="name" type="text" placeholder="Full Name">
+          <mat-error *ngIf="signUpForm.get('name')?.hasError('required') && signUpForm.get('name')?.touched">
+            Full Name is required.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="email" formControlName="email" placeholder="Email Address">
+          <mat-error *ngIf="signUpForm.get('email')?.hasError('required') && signUpForm.get('email')?.touched">
+            Email is required.
+          </mat-error>
+          <mat-error *ngIf="signUpForm.get('email')?.hasError('email') && signUpForm.get('email')?.touched">
+            Email must be a valid format.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="userName" type="text" placeholder="User Name">
+          <mat-error *ngIf="signUpForm.get('userName')?.hasError('required') && signUpForm.get('userName')?.touched">
+            User Name is required.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="password" formControlName="password" placeholder="Password">
+          <mat-error *ngIf="signUpForm.get('password')?.hasError('required') && signUpForm.get('password')?.touched">
+            Password is required.
+          </mat-error>
+        </mat-form-field>
+        <mat-action-row class="d-flex justify-content-center action-row">
+          <button mat-raised-button class="mx-2" color="primary" (click)="doSignUp()">Sign Up</button>
+        </mat-action-row>
+        <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <mat-action-row class="d-flex justify-content-center action-row">
+          <button mat-raised-button class="mx-2" color="warn" (click)="changeMode()">Have Account Already ?</button>
+        </mat-action-row>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

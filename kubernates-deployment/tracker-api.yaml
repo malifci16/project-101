@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: budget-tracker-api-service
+  namespace: budget-tracker
+  labels:
+    app: budget-tracker-api
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 8081
+      nodePort: 30001
+      protocol: TCP
+  selector:
+    app: budget-tracker-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: budget-tracker-api
+  namespace: budget-tracker
+  labels:
+    app: budget-tracker-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: budget-tracker-api
+  template:
+    metadata:
+      namespace: budget-tracker
+      labels:
+        app: budget-tracker-api
+    spec:
+      containers:
+        - name: budget-tracker-api
+          image: pa2577/tracker-api
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8081
+              name: api-port
+          envFrom:
+            - configMapRef:
+                name: budget-tracker-api-config
+          env:
+            - name: BUDGET_TRACKER_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-db-password-secret
+                  key: MONGO_DB_PASSWORD
+---
+# ConfigMap to store variables in
+# --------------------
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: budget-tracker-api-config
+  namespace: budget-tracker
+  labels:
+    data: config
+data:
+  BUDGET_TRACKER_DB_USERNAME: "budget-tracker-user"
+  BUDGET_TRACKER_DB_NAME: "budget-tracker-db"
+  BUDGET_TRACKER_DB_HOST: "budget-tracker-store-service.budget-tracker.svc.cluster.local"
+  BUDGET_TRACKER_DB_PORT: "27017"
+  BUDGET_TRACKER_CONFIG_JWT_KEY: "iHC1HKVgFtK8PrYixWlmSfTbsrBF0C0IkJ5eCDa1pEDfDX/WyM7b0GNXSaRnJ9WWs/XXgdmcgBnZHh0caIlxNw=="
+---

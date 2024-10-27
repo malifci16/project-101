@@ -1,0 +1,28 @@
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-row {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centers vertically if needed */
+  gap: 16px;
+  flex-wrap: wrap; /* Allows items to wrap to the next line on smaller screens */
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.example-radio-button {
+  margin: 5px;
+}

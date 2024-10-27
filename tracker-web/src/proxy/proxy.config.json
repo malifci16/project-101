@@ -1,0 +1,18 @@
+{
+  "/budget-tracker-api/": {
+    "target": "http://budget-tracker-api-service.budget-tracker.svc.cluster.local:30001",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/budget-tracker-api": "/budget-tracker/api"
+    }
+  },
+  "/budget-tracker-auth/": {
+    "target": "http://budget-tracker-api-service.budget-tracker.svc.cluster.local:30001",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/budget-tracker-auth": "/budget-tracker/auth"
+    }
+  }
+}

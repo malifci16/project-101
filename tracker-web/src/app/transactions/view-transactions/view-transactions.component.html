@@ -1,0 +1,53 @@
+<mat-card>
+  <mat-card-content>
+    <div class="example-container mat-elevation-z8">
+      @if (isLoadingResults || isRateLimitReached) {
+        <div class="example-loading-shade">
+          @if (isLoadingResults) {
+            <mat-spinner></mat-spinner>
+          }
+          @if (isRateLimitReached) {
+            <div class="example-rate-limit-reached">
+              API is not reachable. It will be available soon.
+            </div>
+          }
+        </div>
+      }
+    </div>
+    <mat-toolbar color="accent" *ngIf="(dataSource?.data?.length ?? 0) < 1">
+      <span class="example-fill-remaining-space"></span>
+      <span>You don't have any transactions to display</span>
+      <span class="example-fill-remaining-space"></span>
+    </mat-toolbar>
+    <div class="example-table-container">
+      <div class="table-scroll-container">
+        <table mat-table *ngIf="dataSource?.data?.length ?? 0" [dataSource]="dataSource">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef sticky> Transaction Id. </th>
+            <td mat-cell *matCellDef="let element"> {{element?.id}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef sticky> Type </th>
+            <td mat-cell *matCellDef="let element">
+              <h4><span class="badge-expense" *ngIf="element?.type === 'EXPENSE'">EXPENSE</span></h4>
+              <h4><span class="badge-income" *ngIf="element?.type === 'INCOME'">INCOME</span></h4>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef sticky> Amount (SEK) </th>
+            <td mat-cell *matCellDef="let element"> {{element?.amount}} SEK </td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef sticky> Date </th>
+            <td mat-cell *matCellDef="let element"> {{element?.date}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

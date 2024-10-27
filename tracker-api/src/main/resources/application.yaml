@@ -1,0 +1,15 @@
+server:
+  servlet:
+    context-path: /budget-tracker
+  port: 8081
+spring:
+  application:
+    name: tracker-api
+
+  data:
+    mongodb:
+      uri: mongodb://${BUDGET_TRACKER_DB_USERNAME:budget-tracker-user}:${BUDGET_TRACKER_DB_PASSWORD:complexPassword}@${BUDGET_TRACKER_DB_HOST:localhost}:${BUDGET_TRACKER_DB_PORT:27017}/${BUDGET_TRACKER_DB_NAME:budget-tracker-db}
+
+budget-tracker:
+  config:
+    jwt-key-encoded: ${BUDGET_TRACKER_CONFIG_JWT_KEY:iHC1HKVgFtK8PrYixWlmSfTbsrBF0C0IkJ5eCDa1pEDfDX/WyM7b0GNXSaRnJ9WWs/XXgdmcgBnZHh0caIlxNw==}

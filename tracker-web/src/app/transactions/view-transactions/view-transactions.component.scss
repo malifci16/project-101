@@ -1,0 +1,77 @@
+/* Structure */
+.example-container {
+  position: relative;
+}
+
+
+table {
+  width: 100%;
+}
+
+/* Set the height and enable scrolling for the table body */
+.table-scroll-container {
+  max-height: 400px;        /* Set the desired height */
+  overflow-y: auto;         /* Enable vertical scrolling */
+  display: block;
+}
+
+
+.mat-table {
+  width: 100%;  /* Ensure the table stretches to the full width */
+}
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-rate-limit-reached {
+  max-width: 360px;
+  text-align: center;
+}
+
+/* Column Widths */
+.mat-column-number,
+.mat-column-state {
+  width: 64px;
+}
+
+.mat-column-created {
+  width: 124px;
+}
+
+.no-shadow mat-toolbar{
+  box-shadow: none;
+}
+.example-fill-remaining-space {
+  // This fills the remaining space, by using flexbox.
+  // Every toolbar row uses a flexbox row layout.
+  flex: 1 1 auto;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.badge-expense {
+  background-color: orange;    /* Orange background for Expense */
+  color: white;                 /* White text */
+  border-radius: 5px;           /* Rounded corners */
+  padding: 3px 6px;             /* Padding for left and right */
+  font-size: 0.9rem;            /* Adjust font size as needed */
+}
+
+.badge-income {
+  background-color: green;      /* Green background for Income */
+  color: white;                 /* White text */
+  border-radius: 5px;           /* Rounded corners */
+  padding: 3px 6px;             /* Padding for left and right */
+  font-size: 0.9rem;            /* Adjust font size as needed */
+}

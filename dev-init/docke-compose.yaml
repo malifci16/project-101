@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: budget-tracker-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+      - ./*.js:/docker-entrypoint-initdb.d/
+    environment:
+      MONGO_INITDB_DATABASE: budget-tracker-db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootPasswordComplex
+
+volumes:
+  mongodb-data:
+  mongodb-config:

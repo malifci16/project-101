@@ -1,0 +1,68 @@
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: budget-tracker-web-service
+  namespace: budget-tracker
+  labels:
+    app: budget-tracker-web
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 8080
+      nodePort: 30002
+      protocol: TCP
+  selector:
+    app: budget-tracker-web
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: budget-tracker-web
+  namespace: budget-tracker
+  labels:
+    app: budget-tracker-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: budget-tracker-web
+  template:
+    metadata:
+      namespace: budget-tracker
+      labels:
+        app: budget-tracker-web
+    spec:
+      containers:
+        - name: budget-tracker-web
+          image: pa2577/tracker-web
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+              name: web-port
+          volumeMounts:
+            - name: config-js-volume
+              mountPath: /usr/share/nginx/html/assets/config.js
+              subPath: config.js
+      volumes:
+        - name: config-js-volume
+          configMap:
+            name: budget-tracker-web-config
+            items:
+              - key: config.js
+                path: config.js
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: budget-tracker-web-config
+  namespace: budget-tracker
+data:
+  config.js: |
+    (function (window) {
+      window.__env = window.__env || {};
+      window.__env.apiUrl = "http://budget-tracker-api-service.budget-tracker.svc.cluster.local:8081";
+    }(this));
+---

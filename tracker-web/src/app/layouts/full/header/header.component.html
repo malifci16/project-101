@@ -1,0 +1,11 @@
+
+<!-- ============================================================== -->
+<!-- Profile - style you can find in header.scss -->
+<!-- ============================================================== -->
+<ng-container>
+  <button disabled="{{!isUserLoggedIn}}" [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5 p-0 d-flex jc-c align-items-center"> <img src="assets/images/users/1.png" alt="user" class="profile-pic"> </button>
+  <mat-menu #profile="matMenu" class="mymegamenu">
+    <button mat-menu-item (click)="doLogOut()">
+      <mat-icon>exit_to_app</mat-icon> Sign Out </button>
+  </mat-menu>
+</ng-container>

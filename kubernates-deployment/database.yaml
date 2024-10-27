@@ -1,0 +1,129 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: budget-tracker-store-service
+  namespace: budget-tracker
+  labels:
+    app: budget-tracker-store
+spec:
+  ports:
+    - port: 27017
+      targetPort: mongodb-port
+  selector:
+    app: budget-tracker-store
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: budget-tracker-store
+  namespace: budget-tracker
+  labels:
+    app: budget-tracker-store
+spec:
+  serviceName: mongodb
+  replicas: 1
+  selector:
+    matchLabels:
+      app: budget-tracker-store
+  template:
+    metadata:
+      namespace: budget-tracker
+      labels:
+        app: budget-tracker-store
+    spec:
+      containers:
+        - name: budget-tracker-store
+          image: mongo:4.4
+          ports:
+            - containerPort: 27017
+              name: mongodb-port
+          envFrom:
+            - configMapRef:
+                name: budget-tracker-store-config
+          env:
+            - name: MONGO_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-db-password-secret
+                  key: MONGO_DB_PASSWORD
+          volumeMounts:
+            - name: budget-tracker-store-data
+              mountPath: /data/db
+            - name: mongo-config
+              mountPath: /data/configdb
+            - name: mongo-init-script-volume
+              mountPath: /usr/local/bin/mongo-entrypoint.sh
+              subPath: mongo-entrypoint.sh
+          command: ["/bin/bash", "/usr/local/bin/mongo-entrypoint.sh"]
+      volumes:
+        - name: mongo-init-script-volume
+          configMap:
+            name: budget-tracker-store-config
+  volumeClaimTemplates:
+    - metadata:
+        name: budget-tracker-store-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Mi
+    - metadata:
+        name: mongo-config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Mi
+---
+# ConfigMap to store variables in
+# --------------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: budget-tracker-store-config
+  namespace: budget-tracker
+data:
+  MONGO_DB_NAME: "budget-tracker-db"
+  MONGO_USER_NAME: "budget-tracker-user"
+  mongo-entrypoint.sh: |
+    #!/bin/bash
+
+    # Start MongoDB in the background to create the user
+    mongod --bind_ip_all --logpath /var/log/mongodb.log --dbpath /data/db &
+
+    # Wait for MongoDB to become ready for connections
+    until mongo --eval "db.adminCommand('ping')" > /dev/null 2>&1
+    do
+      echo "Waiting for MongoDB to start..."
+      sleep 2
+    done
+
+    # Run the mongo shell commands with environment variables to create the user
+    mongo <<EOF
+    const dbName = "${MONGO_DB_NAME}";
+    const userName = "${MONGO_USER_NAME}";
+    const userPassword = "${MONGO_USER_PASSWORD}";
+
+    db = db.getSiblingDB(dbName);
+
+    db.createUser({
+      user: userName,
+      pwd: userPassword,
+      roles: [
+        {
+          role: "readWrite",
+          db: dbName,
+        }
+      ]
+    });
+    EOF
+
+    echo "MongoDB user created successfully."
+
+    # Stop the background mongod process that was started for user creation
+    mongod --shutdown --dbpath /data/db
+
+    # Start MongoDB in the foreground to keep the container running
+    exec mongod --bind_ip_all --logpath /var/log/mongodb.log --dbpath /data/db
+
